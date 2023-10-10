@@ -1,4 +1,4 @@
-#nclude <stdio.h>
+#include <stdio.h>
 
 void judge_character_or_value(char input[16], char move_direction_character[16], char matrix_element_character[16]){
   scanf("%s", input);
@@ -24,7 +24,11 @@ void judge_character_or_value(char input[16], char move_direction_character[16],
   printf("%s\n", move_direction_character);
 }
 
-int conversion(char move_direction_character[16]){
+double conversion_matrix_element(char matrix_element_character[16]){
+
+}
+
+int conversion_move_direction(char move_direction_character[16]){
   int move_direction_value;
   printf("%c, ", move_direction_character[0]);
   move_direction_value = move_direction_character[0];
@@ -55,7 +59,7 @@ int main(){
 
   judge_character_or_value(input, move_direction_character, matrix_element_character);
 
-  move_direction_value = conversion(move_direction_character);
+  move_direction_value = conversion_move_direction(move_direction_character);
 
   move_matrix(move_direction_value);
 
