@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//test
-
 void display_matrix(int M, int N, double A[16][16]){
   for(int i = 0; i < M; i++){
     for(int j = 0; j < N; j++){
-      printf("%lf\n", A[i][j]);
+      printf("|%15.10lf", A[i][j]);
     }
+    printf("|\n");
   }
 }
 
@@ -22,6 +21,7 @@ void zero_matrix(int M, int N, double A[16][16]){
 
 //入力を数字と文字に分ける
 void judge_character_or_value(char input[16], char move_direction_character[16], char matrix_element_character[16]){
+  printf("\n'h':right 'j:up ''k':down 'l':left\ninput matrix element or character: ");
   scanf("%s", input);
   int matrix_element_number = 0;
   int move_direction_number = 0;
