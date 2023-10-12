@@ -32,19 +32,30 @@ void display_solution(int M, double x[16]){
 }
 
 //行列を移動させる
-void move_matrix(int M, int N, int *m, int *n, int *input_A_flag, int move_direction_value){
+void move_matrix(int M, int N, int *m, int *n, int *mode_flag, int move_direction_value){
   switch(move_direction_value){
     case 104: *n -= 1; break;
     case 106: *m += 1; break;
     case 107: *m -= 1; break;
     case 108: *n += 1; break;
-    case  98: *input_A_flag -= 1; break;
+    case  98: *mode_flag += 1; break;
     default: printf("error\n");
   }
   if(*m < 0) *m = 0;
   else if(*m >= M) *m = M - 1;
   if(*n < 0) *n = 0;
   else if(*n >= N) *n = N - 1;
+}
+
+void move_solution(int M, int *m, int *mode_flag, int move_direction_value){
+  switch(move_direction_value){
+    case 106: *m += 1; break;
+    case 107: *m -= 1; break;
+    case  99: *mode_flag += 1; break;
+    default : printf("error\n");
+  }
+  if(*m < 0) *m = 0;
+  else if(*m >= M) *m = M - 1;
 }
 
 void input_matrix_element(int M, int N, int *m, int *n, double A[16][16], double *matrix_element_value){
@@ -98,35 +109,40 @@ void zero_matrix(int M, int N, double A[16][16]){
 }
 
 //入力を行い、数字と文字に分ける
-void judge_character_or_value(int *mode_select, char input[16], char move_direction_character[16], char matrix_element_character[16]){
-  printf("\n'h':left 'j:down ''k':up 'l':right 'b':input b\ninput matrix element or character: ");
-  scanf("%s", input);
-  int matrix_element_number = 0;
-  int move_direction_number = 0;
-  for(int i = 0; i < 16; i++){
-    if(input[i] == '\0'){ 
-      matrix_element_character[matrix_element_number] = '\0';
-      move_direction_character[move_direction_number] = '\0';
-      break;
-    }
-    else if(input[i] >= 'a' && input[i] <= 'z'){
-      move_direction_character[move_direction_number] = input[i]; 
-      move_direction_number++;
-    }
-    else if(input[i] >= '0' && input[i] <= '9'){
-      matrix_element_character[matrix_element_number] = input[i];
-      matrix_element_number++;
-    }
-    else {break;}
+void judge_character_or_value(int *mode_select, int mode_flag, char input[16], char move_direction_character[16], char matrix_element_character[16]){
+  switch(mode_flag){
+    case 1: printf("\n'h':left 'j:down ''k':up 'l':right 'b':input b");break;
+    case 2: printf("\n'j':down 'k':up 'c':calculate"); break;
   }
-}
+  printf("\ninput matrix element or character:");
+  scanf("%s", input);
+
+  if(input[0] >= 'a' && input[0] <= 'z') {
+    move_direction_character[0] = input[0];
+      if(input[1] != '\0'){
+	move_direction_character = "\0";
+      }
+  }
+  else if(input[0] >= '0' && input[0] <= '9'){
+    for(int i = 0; i < 16; i++){
+      if(input[i] >= '0' && input[i] <= '9'){
+	matrix_element_character[i] = input[i];
+      }
+      else matrix_element_character = "\0";
+    }
+  }
+
+  }
 
 
 //行列の数字を数値に変換
-double conversion_matrix_element(char matrix_element_character[16], int mode_select){
-  double matrix_element_value = 0;
+double conversion_matrix_element(char matrix_element_character[16], int matrix_element_value_memo, int mode_select){
+  double matrix_element_value;
   matrix_element_value = atof(matrix_element_character);
-  return matrix_element_value;
+
+  if(matrix_element_value == 0) matrix_element_value = 0;
+  else matrix_element_value_memo = matrix_element_value;
+  return matrix_element_value_memo;
 }
 
 //行列の移動方向の文字を数値に変更してswitch文で扱えるようにする
@@ -144,12 +160,12 @@ int main(){
   int m = 0, n = 0;
   int X;
   int mode_select = 0;
-  int input_A_flag = 1, input_b_flag = 1;
+  int mode_flag = 1;
 
   char move_direction_character[16];
   int  move_direction_value;
   char matrix_element_character[16];
-  double  matrix_element_value;
+  double  matrix_element_value, matrix_element_value_memo;
   char input[16];
 
   printf("M行N列の正方行列を解きますか\n M = N = ");
@@ -157,24 +173,25 @@ int main(){
   
   zero_matrix(M, N, A);
 
-  while(input_A_flag){
+  while(mode_flag == 1){
     display_matrix(M, N, m, n, A, b);
-    judge_character_or_value(&mode_select, input, move_direction_character, matrix_element_character);
-    matrix_element_value = conversion_matrix_element(matrix_element_character, mode_select);
+    judge_character_or_value(&mode_select, mode_flag, input, move_direction_character, matrix_element_character);
+    matrix_element_value = conversion_matrix_element(matrix_element_character, matrix_element_value_memo, mode_select);
     move_direction_value = conversion_move_direction(move_direction_character, mode_select);
-    move_matrix(M, N, &m, &n, &input_A_flag, move_direction_value);
+    move_matrix(M, N, &m, &n, &mode_flag, move_direction_value);
     input_matrix_element(M, N, &m, &n, A, &matrix_element_value);
   }
   m = 0;
-  while(input_b_flag){
+  while(mode_flag == 2){
     display_equation(M, N, m, n, A, b);
-    judge_character_or_value(&mode_select, input, move_direction_character, matrix_element_character);
-    matrix_element_value = conversion_matrix_element(matrix_element_character, mode_select);
+    judge_character_or_value(&mode_select, mode_flag, input, move_direction_character, matrix_element_character);
+    matrix_element_value = conversion_matrix_element(matrix_element_character, matrix_element_value_memo, mode_select);
     move_direction_value = conversion_move_direction(move_direction_character, mode_select);
-    move_matrix(M, N, &m, &n, &input_A_flag, move_direction_value);
+    move_solution(M, &m, &mode_flag, move_direction_value);
     input_b_element(M, N, &m, &n, b, &matrix_element_value);
   }
   input_random_solution(X, M, x);
+  display_equation(M, N, m, n, A, b);
 
   calculate_matrix(M, N, A, x, b);
 
