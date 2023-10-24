@@ -120,19 +120,18 @@ void judge_character_or_value(int *mode_select, int mode_flag, char input[16], c
   if(input[0] >= 'a' && input[0] <= 'z') {
     move_direction_character[0] = input[0];
       if(input[1] != '\0'){
-	move_direction_character = "\0";
+	    move_direction_character = "\0";
       }
   }
   else if(input[0] >= '0' && input[0] <= '9'){
     for(int i = 0; i < 16; i++){
       if(input[i] >= '0' && input[i] <= '9'){
-	matrix_element_character[i] = input[i];
+	    matrix_element_character[i] = input[i];
       }
       else matrix_element_character = "\0";
     }
   }
-
-  }
+}
 
 
 //行列の数字を数値に変換

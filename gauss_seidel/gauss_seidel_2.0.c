@@ -13,7 +13,7 @@ void zero_matrix(int M, int N, double A[16][16], double b[16]){
 void display_matrix(int M, int N, double A[16][16], double b[16]){
   for(int i = 0; i < N; i++) {printf("%17d", i + 1); if(i == N - 1) printf("\n");}
   for(int i = 0; i < M; i++){
-    printf("  %d  |", i + 1);
+    printf("  %3d  |", i + 1);
     for(int j = 0; j < N; j++){
       printf("%17.10lf", A[i][j]);
     }
@@ -24,7 +24,7 @@ void display_matrix(int M, int N, double A[16][16], double b[16]){
 void display_position_matrix(int M, int N, int m, int n, double A[16][16], double b[16]){
   for(int i = 0; i < N; i++) {printf("%17d", i + 1); if(i == N - 1) printf("\n");}
   for(int i = 0; i < M; i++){
-    printf("  %d  |", i + 1);
+    printf("  %3d  |", i + 1);
     for(int j = 0; j < N; j++){
       if(m == i && n == j) printf(" ●%15.10lf", A[i][j]);
       else printf("%17.10lf", A[i][j]); 
@@ -124,7 +124,10 @@ int main(){
   char input[16]; int input_flag = 0;
   double matrix_element_value = 0;
   int mode_select_value = 0;
-  int input_matrix_flag = 1; int calculate_flag = 1; int mode_select_flag = 0; int zero_matrix_flag = 0; 
+  int input_matrix_flag = 1; 
+  int calculate_flag = 1; 
+  int mode_select_flag = 0; 
+  int zero_matrix_flag = 0; 
   int input_rows_columns_flag = 1;
   double random_solution;
 
