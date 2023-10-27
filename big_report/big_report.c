@@ -8,7 +8,7 @@ int main(){
   int  alphabet_counter_upp[26];
   char alphabet_upp[26];
   
-  int unknown = 0;
+  int blank = 0;
 
   for(int alp = 'a'; alp <= 'z'; alp++){
     alphabet_low[alphabet_number_low] = alp;
@@ -31,7 +31,8 @@ int main(){
   while((chr = fgetc(fp)) != EOF){
     putchar(chr);
     for(int i = 0; i < 26; i++){
-      if     (chr == alphabet_low[i]){alphabet_counter_low[i] += 1; break;}
+      if(chr == ' ') {blank++; break;}
+      else if(chr == alphabet_low[i]){alphabet_counter_low[i] += 1; break;}
       else if(chr == alphabet_upp[i]){alphabet_counter_upp[i] += 1; break;}
     }
   }
@@ -40,8 +41,7 @@ int main(){
 
   for(int i = 0; i < 26; i++){
     printf("%c:%5d| %c:%5d\n", alphabet_low[i], alphabet_counter_low[i], alphabet_upp[i], alphabet_counter_upp[i]);
-
-  } 
+  } printf("blank:%5d\n", blank); 
   
   return 0;
 }
