@@ -7,6 +7,8 @@ int main(){
   int  alphabet_number_upp = 0;
   int  alphabet_counter_upp[26];
   char alphabet_upp[26];
+  
+  int unknown = 0;
 
   for(int alp = 'a'; alp <= 'z'; alp++){
     alphabet_low[alphabet_number_low] = alp;
@@ -37,7 +39,8 @@ int main(){
   fclose(fp);
 
   for(int i = 0; i < 26; i++){
-    printf("%c:%5d\n", alphabet_low[i], alphabet_counter_low[i]);
+    printf("%c:%5d| %c:%5d\n", alphabet_low[i], alphabet_counter_low[i], alphabet_upp[i], alphabet_counter_upp[i]);
+
   } 
   
   return 0;
