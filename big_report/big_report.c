@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <ctype.h>
+
+char word[64][32];
 
 int main(){
   int  alphabet_low_number = 0;
@@ -7,6 +10,9 @@ int main(){
   int  alphabet_upp_number = 0;
   int  alphabet_upp_counter[26];
   char alphabet_upp[26];
+  int  word_flag = 0;
+  int  word_number = 0;
+  int  word_length = 0;
   
   int blank = 0;
 
@@ -31,20 +37,40 @@ int main(){
   fp = fopen(sentence, "r");
 
   while((chr = fgetc(fp)) != EOF){
-    putchar(chr);
+    if(chr == ' ') {blank++;}
     for(int i = 0; i < 26; i++){
-      if(chr == ' ') {blank++; break;}
-      else if(chr == alphabet_low[i]){alphabet_low_counter[i] += 1; break;}
+      if     (chr == alphabet_low[i]){alphabet_low_counter[i] += 1; break;}
       else if(chr == alphabet_upp[i]){alphabet_upp_counter[i] += 1; break;}
+    } 
+    if('a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z'){
+      word[word_number][word_length] = tolower(chr);
+      word_length++;
     }
+    else if(chr == ' ' || chr == '\n'){word_number++; word_length = 0;}
   }
 
   fclose(fp);
 
   //結果を表示
   for(int i = 0; i < 26; i++){
-    printf("%c:%5d| %c:%5d\n", alphabet_low[i], alphabet_low_counter[i], alphabet_upp[i], alphabet_upp_counter[i]);
+    printf("%c:%10d| %c:%10d\n", alphabet_low[i], alphabet_low_counter[i], alphabet_upp[i], alphabet_upp_counter[i]);
   } printf("blank:%5d\n", blank); 
   
+  for(int i = 0; i < 30; i++){
+    printf("%s\n", word[i]);
+  }
+  printf("%d, %d\n", word_number, word_length);
+
   return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
