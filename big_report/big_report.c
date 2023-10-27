@@ -19,5 +19,17 @@ int main(){
     printf("%c", alphabet_upp[i]);
   } printf("\n");
 
-}
+  FILE *fp;
+  char sentence[] = "sentence.txt";
+  char chr;
+  fp = fopen(sentence, "r");
 
+  while((chr = fgetc(fp)) != EOF){
+    putchar(chr);
+  }
+
+  fclose(fp);
+
+
+  return 0;
+}
