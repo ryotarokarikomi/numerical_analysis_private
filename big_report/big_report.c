@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 char word[1024][32];
 
@@ -10,9 +11,11 @@ int main(){
   int  alphabet_upp_number = 0;
   int  alphabet_upp_counter[26];
   char alphabet_upp[26];
-  int  word_flag = 0;
   int  word_number = 0;
   int  word_length = 0; 
+  int  word_flag = 0;
+  int  compare_word_flag = 0;
+  int  word_counter[1024];
   int blank = 0;
 
   for(int i = 0; i < 26; i++){
@@ -36,7 +39,7 @@ int main(){
 
   //アルファベットを認識
   FILE *fp;
-  char sentence[] = "sentence.txt";
+  char sentence[] = "sentence1.txt";
   char chr;
   fp = fopen(sentence, "r");
 
@@ -49,11 +52,31 @@ int main(){
       }
     } 
     if('a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z'){
-      if(word_flag == 1){word_number++; word_length = 0; word_flag = 0;}
+      if(word_flag == 1){
+	word_counter[word_number] = 0; 
+	word_number++; 
+	word_length = 0; 
+	word_flag = 0; 
+	for(int i = 0; i < word_number - 1; i++){
+	  printf("%s == %s\n", word[word_number - 1], word[i]);
+	  if(strcmp(word[word_number - 1], word[i]) == 0){
+	    printf("same word\n");
+	    word_counter[i]++;
+	    /*for(int j = 0; j < word_length; j++){
+	      word[i][j] = '\0';
+	    }
+	    word_number--;
+	    break;*/
+	  }
+	}
+      }
       word[word_number][word_length] = tolower(chr);
       word_length++;
     }
     else if(chr == ' ' || chr == '\n'){word_flag = 1;}
+
+       
+    
   }
 
   fclose(fp);
@@ -66,7 +89,10 @@ int main(){
   for(int i = 0; i <= word_number; i++){
     printf("%s, ", word[i]);
   } printf("\n");
-  printf("%d, %d\n", word_number, word_length);
+  printf("\nnumber of words:%d\n", word_number + 1);
+  for(int i=0; i < word_number; i++){
+    printf("%d\n", word_counter[i]); 
+  }
 
   return 0;
 }
