@@ -13,9 +13,10 @@ int main(){
   int  alphabet_upp_number = 0;
   int  alphabet_upp_counter[26];
   char alphabet_upp[26];
-  char sentence[1024];
-  char sentence_output[1024];
+  char sentence[10000];
+  char sentence_output[10000];
   char chr_output;
+  int  output_counter = 0;
   int  chr_counter = 0;
   int  blank_counter = 0;
 
@@ -63,9 +64,11 @@ int main(){
   for(int i = 0; i < chr_counter; i++){
     chr_output = sentence[get_random(0, chr_counter - 1)];
     if(isalpha(chr_output) || chr_output == ' '){
-      printf("%c", chr_output);
+      sentence_output[output_counter] = chr_output;
+      output_counter++;
     }
-  } printf("\n");
+  } 
+  printf("%s\n", sentence_output);
   
 
   return 0;
