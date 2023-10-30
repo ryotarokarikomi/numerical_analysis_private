@@ -42,8 +42,6 @@ int main(){
 
   fp = fopen(text, "r");
   while((chr = fgetc(fp)) != EOF){
-    sentence[chr_counter] = chr;
-    chr_counter++;
     if(chr == ' ') {blank_counter++;}
     for(int i = 0; i < 26; i++){
       if(isalpha(chr)){
@@ -58,6 +56,22 @@ int main(){
   for(int i = 0; i < 26; i++){
     printf("%c:%10d| %c:%10d\n", alphabet_low[i], alphabet_low_counter[i], alphabet_upp[i], alphabet_upp_counter[i]);
   } printf("blank:%5d, chr:%5d\n", blank_counter, chr_counter); 
+
+  for(int i = 0; i < chr_counter; i++){
+  }
+
+  for(int i = 0; i < 26; i++){
+    for(int j = 0; j < alphabet_low_counter[i] + alphabet_upp_counter[i]; j++){
+      sentence[chr_counter] = alphabet_low[i];
+      chr_counter++;
+    }
+  }
+  for(int i = 0; i < blank_counter; i++){
+    sentence[chr_counter] = ' ';
+    chr_counter++;
+  }
+   printf("%s, %d\n", sentence, chr_counter);
+
 
   //ランダムに文字を出力
   srand((unsigned int)time(NULL));
