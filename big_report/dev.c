@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
-char word[1024][32];
+int get_random(int min, int max);
 
 int main(){
   int  alphabet_low_number = 0;
@@ -11,6 +13,9 @@ int main(){
   int  alphabet_upp_number = 0;
   int  alphabet_upp_counter[26];
   char alphabet_upp[26];
+  char sentence[1024];
+  char sentence_output[1024];
+  char chr_output;
   int  chr_counter = 0;
   int  blank_counter = 0;
 
@@ -28,18 +33,15 @@ int main(){
     alphabet_upp[alphabet_upp_number] = alp;
     alphabet_upp_number++;
   }
-  for(int i = 0; i < 26; i++){
-    printf("%c", alphabet_low[i]);
-    printf("%c", alphabet_upp[i]);
-  } printf("\n");
 
   //アルファベットを認識
   FILE *fp;
-  char sentence[] = "sentence1.txt";
+  char text[] = "text1.txt";
   char chr;
-  fp = fopen(sentence, "r");
 
+  fp = fopen(text, "r");
   while((chr = fgetc(fp)) != EOF){
+    sentence[chr_counter] = chr;
     chr_counter++;
     if(chr == ' ') {blank_counter++;}
     for(int i = 0; i < 26; i++){
@@ -49,20 +51,30 @@ int main(){
       }
     } 
   }
-
   fclose(fp);
 
   //結果を表示
   for(int i = 0; i < 26; i++){
     printf("%c:%10d| %c:%10d\n", alphabet_low[i], alphabet_low_counter[i], alphabet_upp[i], alphabet_upp_counter[i]);
   } printf("blank:%5d, chr:%5d\n", blank_counter, chr_counter); 
+
+  //ランダムに文字を出力
+  srand((unsigned int)time(NULL));
+  for(int i = 0; i < chr_counter; i++){
+    chr_output = sentence[get_random(0, chr_counter - 1)];
+    if(isalpha(chr_output) || chr_output == ' '){
+      printf("%c", chr_output);
+    }
+  } printf("\n");
   
 
   return 0;
 }
 
 
-
+int get_random(int min, int max){
+  return min + (int)(rand() * (max - min + 1.0) / (1.0 + RAND_MAX));
+}
 
 
 
