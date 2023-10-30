@@ -38,7 +38,7 @@ int main(){
 
   //アルファベットを認識
   FILE *fp;
-  char text[] = "text.txt";
+  char text[] = "text1.txt";
   char chr;
 
   fp = fopen(text, "r");
