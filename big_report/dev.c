@@ -19,6 +19,7 @@ int main(){
   int  output_counter = 0;
   int  chr_counter = 0;
   int  blank_counter = 0;
+  int  blank_flag = 0;
 
   for(int i = 0; i < 26; i++){
     alphabet_low_counter[i] = 0;
@@ -37,7 +38,7 @@ int main(){
 
   //アルファベットを認識
   FILE *fp;
-  char text[] = "text1.txt";
+  char text[] = "text.txt";
   char chr;
 
   fp = fopen(text, "r");
@@ -57,9 +58,7 @@ int main(){
     printf("%c:%10d| %c:%10d\n", alphabet_low[i], alphabet_low_counter[i], alphabet_upp[i], alphabet_upp_counter[i]);
   } printf("blank:%5d, chr:%5d\n", blank_counter, chr_counter); 
 
-  for(int i = 0; i < chr_counter; i++){
-  }
-
+//入力された文章をアルファベット順に整列させる
   for(int i = 0; i < 26; i++){
     for(int j = 0; j < alphabet_low_counter[i] + alphabet_upp_counter[i]; j++){
       sentence[chr_counter] = alphabet_low[i];
@@ -67,19 +66,31 @@ int main(){
     }
   }
   for(int i = 0; i < blank_counter; i++){
-    sentence[chr_counter] = ' ';
-    chr_counter++;
+    sentence[chr_counter + i] = ' ';
   }
-   printf("%s, %d\n", sentence, chr_counter);
+  printf("%s, %d\n", sentence, chr_counter);
 
 
   //ランダムに文字を出力
   srand((unsigned int)time(NULL));
-  for(int i = 0; i < chr_counter; i++){
-    chr_output = sentence[get_random(0, chr_counter - 1)];
-    if(isalpha(chr_output) || chr_output == ' '){
+  for(int i = 0; i < chr_counter + blank_counter; i++){
+    if(blank_flag == 1){
+      chr_output = sentence[get_random(0, chr_counter + blank_counter - 2)];
+      if(chr_output == ' '){
+        sentence_output[output_counter] = chr_output;
+        output_counter++;
+        blank_flag = 0;
+      }
+      else{
+        sentence_output[output_counter] = chr_output;
+        output_counter++;
+      } 
+    }
+    else if(blank_flag == 0){
+      chr_output = sentence[get_random(0, chr_counter - 1)];
       sentence_output[output_counter] = chr_output;
       output_counter++;
+      blank_flag = 1;
     }
   } 
   printf("%s\n", sentence_output);
