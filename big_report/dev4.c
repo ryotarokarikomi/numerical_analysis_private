@@ -51,14 +51,13 @@ int main(){
     alphabet_upp[alphabet_number] = alp;
     alphabet_number++;
   } alphabet_number = 0;
-  for(int i = 0; i < 26; i++){
+  for(int i = 0; i < 27; i++){
     for(int alp = 'a'; alp <= 'z'; alp++){
       alphabet_2nd[i][alphabet_number] = alp;
       alphabet_number++;
     } alphabet_number = 0;
   }
   for(int i = 0; i < 27; i++){
-    alphabet_2nd[26][i] = ' ';
     alphabet_2nd[i][26] = ' ';
   }
 
