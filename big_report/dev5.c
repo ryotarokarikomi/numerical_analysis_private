@@ -151,9 +151,32 @@ int main(){
         break;
       }
     }
-  }
-  
-  printf("%s.\n", sentence_output);
+  } sentence_output_number = 0;
+  printf("2次近似:%s.\n", sentence_output);
+
+  blank_flag = 0;
+  srand((unsigned int)time(NULL));
+    for(int i = 0; i < 100; i++){
+      if(blank_flag == 1){
+        chr_output = sentence[get_random(0, chr_counter + blank_counter - 2)];
+        if(chr_output == ' '){
+          sentence_output[sentence_output_number] = chr_output;
+          sentence_output_number++;
+          blank_flag = 0;
+        }
+        else{
+          sentence_output[sentence_output_number] = chr_output;
+          sentence_output_number++;
+        } 
+      }
+      else if(blank_flag == 0){
+        chr_output = sentence[get_random(0, chr_counter - 1)];
+        sentence_output[sentence_output_number] = chr_output;
+        sentence_output_number++;
+        blank_flag = 1;
+      }
+    }
+  printf("1次近似:%s.\n", sentence_output);
   return 0;
 }
 

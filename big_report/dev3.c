@@ -63,7 +63,7 @@ int main(){
 
   //アルファベットを認識
   FILE *fp;
-  char text[] = "bible.txt";
+  char text[] = "text.txt";
   char chr;
 
   fp = fopen(text, "r");
