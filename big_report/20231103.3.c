@@ -9,6 +9,8 @@ void make_random_sentence(int chr_counter, int blank_counter,  int output_counte
 
 void input_alphabet_3rd(char alphabet_3rd[27][27][27], int alphabet_number);
 
+int  limit = 0;
+
 char alphabet_3rd[27][27][27];
 char sentence_3rd[27][27][1000000];
 int  sentence_3rd_number = 0;
@@ -17,28 +19,30 @@ int  chr_3rd_counter[27][27];
 int  blank_3rd_counter[27][27];
 int  alphabet_number = 0;
 
+char sentence_original[1024][1024];
+int  sentence_line_number = 0;
+int  sentence_number = 0;
+
 int main(){
-  input_alphabet_3rd(alphabet_3rd, alphabet_number);
-  for(int i = 0; i < 27; i++){
-    for(int j = 0; j < 27; j++){
-    printf("[%2d:%2d]", i, j);
-      for(int k = 0; k < 27; k++){
-        printf("%c.", alphabet_3rd[i][j][k]);
-      } printf("\n");
-    }   
-  }
   FILE *fp;
   char text[] = "bible.txt";
   char chr;
 
   fp = fopen(text, "r");
   while((chr = fgetc(fp)) != EOF){
+    limit++;
+    if(isalpha(chr)){
+      sentence_original[sentence_line_number][sentence_number] = tolower(chr); sentence_number++;
+    }
+  if(limit == 1024)break;
   }
   fclose(fp);
 
+  printf("%s.\n", sentence_original[0]);
 
   return 0;
 }
+
 
 void input_alphabet_3rd(char alphabet_3rd[27][27][27], int alphabet_number){
   for(int i = 0; i < 27; i++){
