@@ -4,20 +4,27 @@
 #include <ctype.h>
 #include <string.h>
 
-char alphabet_2nd[27][27];
-char sentence_2nd[27][1000000];
-int  sentence_2nd_number = 0;
-int  alphabet_2nd_counter[27][27];
-
 int get_random(int min, int max);
 void make_random_sentence(int chr_counter, int blank_counter,  int output_counter, int blank_flag, char chr_output, char sentence[1000000], char sentence_output[1000000]);
 
 char alphabet_2nd[27][27];
+char sentence_2nd[27][1000000];
+int  sentence_2nd_number = 0;
 int  alphabet_2nd_counter[27][27];
 int  chr_2nd_counter[27];
 int  blank_2nd_counter[27];
+
+char alphabet_3rd[27][27][27];
+char sentence_3rd[27][27][1000000];
+int  sentence_3rd_number = 0;
+int  alphabet_3rd_counter[27][27][27];
+int  chr_3rd_counter[27][27];
+int  blank_3rd_counter[27][27];
+
 int  chr_limit_counter = 0;
 int  alphabet_1st_number;
+int  alphabet_2nd_number;
+
 int  alphabet_low_counter[26];
 char alphabet_low[26];
 int  alphabet_upp_counter[26];
