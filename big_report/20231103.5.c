@@ -31,6 +31,7 @@ int  alphabet_upp_counter[26];
 char alphabet_upp[26];
 int  alphabet_number = 0;
 char sentence[1000000];
+int  sentence_NUMBER = 0;
 char chr_output;
 char sentence_output[1000000];
 int  sentence_output_number = 0;
@@ -95,6 +96,21 @@ void input_alphabet_3rd(char alphabet_3rd[27][27][27], int alphabet_number){
   }
 }
 
+void display_alphabet_3rd_counter(int alphabet_3rd_counter[27][27][27]){
+  for(int i = 0; i < 27; i++){
+    printf("[%c]\n ", alphabet_3rd[0][0][i]);
+    for(int I = 0; I < 27; I++){
+      printf("%5c", alphabet_3rd[0][0][I]);
+    } printf("\n");
+    for(int j = 0; j < 27; j++){
+    printf("%c: ", alphabet_3rd[0][0][j]);
+      for(int k = 0; k < 27; k++){
+        printf("%3d, ", alphabet_3rd_counter[i][j][k]);
+      } printf("\n");
+    }
+  }
+}
+
 int main(){
   
   //アルファベットの識別子を設定
@@ -102,17 +118,16 @@ int main(){
   input_alphabet(alphabet_low, alphabet_number); //小文字の識別子
   input_ALPHABET(alphabet_upp, alphabet_number); //大文字の識別子
   input_alphabet_2nd(alphabet_2nd, alphabet_number); //二番目の文字の識別子
-  input_alphabet_3rd(alphabet_3rd, alphabet_number); //三番目の文字の識別子
-
-  for(int i = 0; i < 27; i++){
+  input_alphabet_3rd(alphabet_3rd, alphabet_number); //二番目の文字の識別子
+  
+  /*for(int i = 0; i < 27; i++){
     for(int j = 0; j < 27; j++){
     printf("[%2d:%2d]", i, j);
       for(int k = 0; k < 27; k++){
         printf("%c.", alphabet_3rd[i][j][k]);
       } printf("\n");
-    }   
-  }   
-  
+    }
+  }*/
 
   //テキストファイルを開いて文字を読み込む
   FILE *fp;
@@ -121,44 +136,102 @@ int main(){
 
   fp = fopen(text, "r");
   while((chr = fgetc(fp)) != EOF){
-    chr_limit_counter++;
    //setence_originalに原文の改行や記号を取り除いたものを保存 
     if(isalpha(chr)){
-      sentence_original[sentence_number] = tolower(chr); sentence_number++;
+      chr = tolower(chr);
+      sentence_original[sentence_number] = chr; sentence_number++;
       for(int i = 0; i < 26; i++){//アルファベットの個数を調べる
-        if     (chr == alphabet_low[i]){alphabet_low_counter[i] += 1; alphabet_2nd_counter[alphabet_1st_number][i]++; alphabet_1st_number = i; break;}
-	      else if(chr == alphabet_upp[i]){alphabet_upp_counter[i] += 1; alphabet_2nd_counter[alphabet_1st_number][i]++; alphabet_1st_number = i; break;}
+        if(chr == alphabet_low[i]){
+          alphabet_low_counter[i] += 1; 
+          if(chr_limit_counter >= 1) alphabet_2nd_counter[alphabet_2nd_number][i]++;
+          if(chr_limit_counter >= 2) alphabet_3rd_counter[alphabet_1st_number][alphabet_2nd_number][i]++;
+          alphabet_1st_number = alphabet_2nd_number;
+          alphabet_2nd_number = i;
+          break;
+        }
       }
       sentence[chr_counter] = tolower(chr);
       chr_counter++;
-      blank_flag = 1; indection_flag = 1;
+      blank_flag = 1; 
     }
-    else if(chr == ' ' && blank_flag && indection_flag){
-      sentence_original[sentence_number] = ' '; sentence_number++;
-      alphabet_2nd_counter[alphabet_1st_number][26]++;
-      alphabet_1st_number = 26;
-      blank_flag = 0;
-      blank_counter++;
+    else if(blank_flag){
+      if(chr == ' '){
+        sentence_original[sentence_number] = ' '; sentence_number++;
+        if(chr_limit_counter >= 1)alphabet_2nd_counter[alphabet_2nd_number][26]++;
+        if(chr_limit_counter >= 2)alphabet_3rd_counter[alphabet_1st_number][alphabet_2nd_number][26]++;
+        alphabet_1st_number = alphabet_2nd_number;
+        alphabet_2nd_number = 26;
+        blank_flag = 0;
+        blank_counter++;
+      }
+      else if(chr == '\n'){
+        sentence_original[sentence_number] = ' '; sentence_number++;
+        if(chr_limit_counter >= 1)alphabet_2nd_counter[alphabet_2nd_number][26]++;
+        if(chr_limit_counter >= 2)alphabet_3rd_counter[alphabet_1st_number][alphabet_2nd_number][26]++;
+        alphabet_1st_number = alphabet_2nd_number;
+        alphabet_2nd_number = 26;
+        blank_flag = 0;
+        blank_counter++;
+      }
     }
-    else if(chr == '\n' && blank_flag && indection_flag){
-      sentence_original[sentence_number] = ' '; sentence_number++;
-      alphabet_2nd_counter[alphabet_1st_number][26]++;
-      alphabet_1st_number = 26;
-      indection_flag = 0;
-      blank_counter++;
-    }
-    if(chr_limit_counter == 1000) break;
+    chr_limit_counter++;
+    if(chr_limit_counter == 10000)break;
   }
   fclose(fp);
 
+  //3番目の文字のカウンターを表示
+  //display_alphabet_3rd_counter(alphabet_3rd_counter);
+  
   for(int i = 0; i < blank_counter; i++){
     sentence[chr_counter + i] = ' ';
   }
-  //結果を表示
-  
 
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 27; j++){
+      for(int k = 0; k < alphabet_2nd_counter[i][j]; k++){
+	      sentence_2nd[i][sentence_2nd_number] = alphabet_2nd[i][j];
+	      sentence_2nd_number++;
+      }
+    } sentence_2nd_number = 0;
+  }
+
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 26; j++){
+      chr_2nd_counter[i] += alphabet_2nd_counter[i][j];
+    }
+  }
+  for(int i = 0; i < 27; i++){
+    blank_2nd_counter[i] = alphabet_2nd_counter[i][26];
+  }
+  
+  //3番目の文字を確立の文字列に
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 27; j++){
+      for(int k = 0; k < 27; k++){
+        for(int m = 0; m < alphabet_3rd_counter[i][j][k]; m++){
+          sentence_3rd[i][j][sentence_3rd_number] = alphabet_3rd[i][j][k];
+          sentence_3rd_number++;
+        }
+      } sentence_3rd_number = 0;
+    }
+  }
+
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 27; j++){
+      for(int k = 0; k < 26; k++){
+        chr_3rd_counter[i][j] += alphabet_3rd_counter[i][j][k];
+      }
+    }
+  }
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 27; j++){
+      blank_3rd_counter[i][j] = alphabet_3rd_counter[i][j][26];
+    }
+  }
 
   //ランダムに文字を出力
+  srand((unsigned int)time(NULL));
+
   srand((unsigned int)time(NULL));
   chr_output = sentence[get_random(0, chr_counter - 1)];
   sentence_output[sentence_output_number] = chr_output; sentence_output_number++;

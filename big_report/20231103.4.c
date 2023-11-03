@@ -24,6 +24,8 @@ int  blank_3rd_counter[27][27];
 int  chr_limit_counter = 0;
 int  alphabet_1st_number;
 int  alphabet_2nd_number;
+int  flag_1st = 0;
+int  flag_2nd = 1;
 
 int  alphabet_low_counter[26];
 char alphabet_low[26];
@@ -102,18 +104,8 @@ int main(){
   input_alphabet(alphabet_low, alphabet_number); //小文字の識別子
   input_ALPHABET(alphabet_upp, alphabet_number); //大文字の識別子
   input_alphabet_2nd(alphabet_2nd, alphabet_number); //二番目の文字の識別子
-  input_alphabet_3rd(alphabet_3rd, alphabet_number); //三番目の文字の識別子
-
-  for(int i = 0; i < 27; i++){
-    for(int j = 0; j < 27; j++){
-    printf("[%2d:%2d]", i, j);
-      for(int k = 0; k < 27; k++){
-        printf("%c.", alphabet_3rd[i][j][k]);
-      } printf("\n");
-    }   
-  }   
+  input_alphabet_3rd(alphabet_3rd, alphabet_number); //二番目の文字の識別子
   
-
   //テキストファイルを開いて文字を読み込む
   FILE *fp;
   char text[] = "bible.txt";
@@ -121,13 +113,23 @@ int main(){
 
   fp = fopen(text, "r");
   while((chr = fgetc(fp)) != EOF){
-    chr_limit_counter++;
    //setence_originalに原文の改行や記号を取り除いたものを保存 
     if(isalpha(chr)){
-      sentence_original[sentence_number] = tolower(chr); sentence_number++;
+      chr = tolower(chr);
+      sentence_original[sentence_number] = chr; sentence_number++;
       for(int i = 0; i < 26; i++){//アルファベットの個数を調べる
-        if     (chr == alphabet_low[i]){alphabet_low_counter[i] += 1; alphabet_2nd_counter[alphabet_1st_number][i]++; alphabet_1st_number = i; break;}
-	      else if(chr == alphabet_upp[i]){alphabet_upp_counter[i] += 1; alphabet_2nd_counter[alphabet_1st_number][i]++; alphabet_1st_number = i; break;}
+        if(chr == alphabet_low[i]){
+          alphabet_low_counter[i]++; 
+          if(chr_limit_counter >= 1){
+            alphabet_2nd_counter[alphabet_2nd_number][i]++;
+          }
+          if(chr_limit_counter >= 2){
+            alphabet_3rd_counter[alphabet_1st_number][alphabet_2nd_number][i]++; 
+          }
+          alphabet_1st_number = alphabet_2nd_number;
+          alphabet_2nd_number = i;
+          break;
+        }
       }
       sentence[chr_counter] = tolower(chr);
       chr_counter++;
@@ -147,7 +149,8 @@ int main(){
       indection_flag = 0;
       blank_counter++;
     }
-    if(chr_limit_counter == 1000) break;
+    chr_limit_counter++;
+    if(chr_limit_counter == 1000000)break;
   }
   fclose(fp);
 
@@ -155,8 +158,22 @@ int main(){
     sentence[chr_counter + i] = ' ';
   }
   //結果を表示
-  
-
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 27; j++){
+      for(int k = 0; k < alphabet_2nd_counter[i][j]; k++){
+	      sentence_2nd[i][sentence_2nd_number] = alphabet_2nd[i][j];
+	      sentence_2nd_number++;
+      }
+    } sentence_2nd_number = 0;
+  }
+  for(int i = 0; i < 27; i++){
+    for(int j = 0; j < 26; j++){
+      chr_2nd_counter[i] += alphabet_2nd_counter[i][j];
+    }
+  }
+  for(int i = 0; i < 27; i++){
+    blank_2nd_counter[i] = alphabet_2nd_counter[i][26];
+  }
 
   //ランダムに文字を出力
   srand((unsigned int)time(NULL));

@@ -124,6 +124,7 @@ int main(){
   }
   fclose(fp);
 
+  printf("%s.\n", sentence_original);
   for(int i = 0; i < blank_counter; i++){
     sentence[chr_counter + i] = ' ';
   }
