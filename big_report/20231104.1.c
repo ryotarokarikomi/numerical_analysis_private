@@ -164,7 +164,7 @@ int main(){
   
   //テキストファイルを開いて文字を読み込む
   FILE *fp;
-  char text[] = "text.txt";
+  char text[] = "bible.txt";
   char chr;
 
   fp = fopen(text, "r");
@@ -208,11 +208,11 @@ int main(){
       }
     }
     chr_limit_counter++;
-    if(chr_limit_counter == 10000)break;
+    if(chr_limit_counter == 1000000)break;
   }
   fclose(fp);
 
-  for(int i = 0; i < 1101; i++){
+  for(int i = 0; i < 10000; i++){
     printf("%c", sentence_original[i]);
   } printf("\n");
 
